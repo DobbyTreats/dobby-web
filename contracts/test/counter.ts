@@ -6,35 +6,31 @@ import { Counter__factory, Counter } from "../../frontend/types/typechain"
 chai.use(chaiAsPromised)
 const { expect } = chai
 
-describe("Counter", () => {
+describe("[Counter Contract]", () => {
   let counter: Counter
 
   beforeEach(async () => {
-    // 1
     const signers = await ethers.getSigners()
 
-    // 2
-    const counterFactory = (await ethers.getContractFactory("Counter", signers[0])) as Counter__factory
+    const counterFactory = ((await ethers.getContractFactory("Counter", signers[0])) as unknown) as Counter__factory
     counter = await counterFactory.deploy()
     await counter.deployed()
-    const initialCount = await counter.getCount()
-
-    // 3
-    expect(initialCount).to.eq(0)
-    expect(counter.address).to.properAddress
   })
 
-  // 4
-  describe("count up", async () => {
-    it("should count up", async () => {
-      await counter.countUp()
-      let count = await counter.getCount()
-      expect(count).to.eq(1)
+  describe("deployment", function () {
+    it("should have count 0", async function () {
+      expect(await counter.getCount()).to.equal(0)
     })
   })
 
-  describe("count down", async () => {
-    // 5
+  describe("counting up", async () => {
+    it("should count up", async () => {
+      await counter.countUp()
+      expect(await counter.getCount()).to.eq(1)
+    })
+  })
+
+  describe("counting down", async () => {
     it("should fail due to underflow exception", () => {
       return expect(counter.countDown()).to.eventually.be.rejectedWith(
         Error,
@@ -44,10 +40,8 @@ describe("Counter", () => {
 
     it("should count down", async () => {
       await counter.countUp()
-
       await counter.countDown()
-      const count = await counter.getCount()
-      expect(count).to.eq(0)
+      expect(await counter.getCount()).to.eq(0)
     })
   })
 })

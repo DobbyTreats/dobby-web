@@ -14,5 +14,6 @@
   "emmet.showExpandedAbbreviation": "never",
   "[solidity]": {
     "editor.defaultFormatter": "JuanBlanco.solidity"
-  }
+  },
+  "solidity.defaultCompiler": "localFile"
 }
