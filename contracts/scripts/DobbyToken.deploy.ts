@@ -1,9 +1,12 @@
 import { ethers } from "hardhat"
+import common from "../common/index"
+
+// NOTE: this is just for testing; actual tokens are deployed by the DEX
 
 async function main() {
   console.log(`\n[DobbyToken Contract]`)
   const factory = await ethers.getContractFactory("DobbyToken")
-  let contract = await factory.deploy("1000000000000000000000000") // 1,000,000 * 1e18
+  let contract = await factory.deploy(ethers.utils.parseEther(common.totalSupplyEthers))
   console.log(`\tDeploying... (tx: ${contract.deployTransaction.hash})`)
   await contract.deployed()
   // remove last line

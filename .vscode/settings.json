@@ -15,5 +15,6 @@
   "[solidity]": {
     "editor.defaultFormatter": "JuanBlanco.solidity"
   },
-  "solidity.defaultCompiler": "localFile"
+  "solidity.defaultCompiler": "localFile",
+  "solidity.packageDefaultDependenciesDirectory": "./contracts/node_modules"
 }

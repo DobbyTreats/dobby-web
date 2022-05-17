@@ -1,16 +1,17 @@
 import { ethers } from "hardhat"
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
-import { DobbyTreats__factory, DobbyTreats } from "../../frontend/types/typechain"
+import { DobbyToken__factory, DobbyToken } from "../../frontend/types/typechain/index"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { BigNumber } from "ethers"
+import common from "../common/index"
 
 chai.use(chaiAsPromised)
 const { expect } = chai
 
 describe("[DobbyToken Contract]", function () {
-  const totalSupply: string = "10000000000000000000000" // 10000 * 1e18
-  let dobbytoken: DobbyTreats
+  const totalSupply: string = ethers.utils.parseEther(common.totalSupplyEthers).toString() // 1 million
+  let dobbytoken: DobbyToken
 
   // Toy signers
   let owner: SignerWithAddress
@@ -19,9 +20,10 @@ describe("[DobbyToken Contract]", function () {
   let addrs: SignerWithAddress[]
 
   beforeEach(async function () {
-    const dobbytokenFactory = ((await ethers.getContractFactory("DobbyToken")) as unknown) as DobbyTreats__factory
+    const dobbytokenFactory = ((await ethers.getContractFactory("DobbyToken")) as unknown) as DobbyToken__factory
     ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
     dobbytoken = await dobbytokenFactory.deploy(totalSupply)
+    await dobbytoken.deployed()
   })
 
   describe("deployment", function () {
@@ -51,7 +53,7 @@ describe("[DobbyToken Contract]", function () {
       expect(ownerBalanceNew).to.equal(ownerBalance.sub(50))
     })
 
-    it("should fail if sender doesn’t have enough tokens", async function () {
+    it("should fail if sender doesn't have enough tokens", async function () {
       const initialOwnerBalance: BigNumber = await dobbytoken.balanceOf(owner.address)
 
       // Try to send 1 token from addr1 (0 tokens) to owner.

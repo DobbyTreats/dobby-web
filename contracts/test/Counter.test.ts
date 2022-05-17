@@ -1,7 +1,7 @@
 import { ethers } from "hardhat"
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
-import { Counter__factory, Counter } from "../../frontend/types/typechain"
+import { Counter__factory, Counter } from "../../frontend/types/typechain/index"
 
 chai.use(chaiAsPromised)
 const { expect } = chai

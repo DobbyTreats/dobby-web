@@ -1,4 +1,5 @@
 import { ethers } from "hardhat"
+
 async function main() {
   const contracts: string[] = ["Counter"]
   for (const c of contracts) {
