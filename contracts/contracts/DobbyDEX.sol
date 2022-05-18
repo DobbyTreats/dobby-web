@@ -18,7 +18,7 @@ contract DobbyDEX {
   }
 
   function _getAmount(uint256 value) internal view returns (uint256) {
-    return value / price; // price of each toke is 0.01 ether
+    return value / price;
   }
 
   function buy() public payable {
@@ -31,11 +31,17 @@ contract DobbyDEX {
   }
 
   function sell(uint256 amount) public {
+    // Check if amount is positive
     require(amount > 0, "You need to sell at least some tokens");
+
+    // Check if sender has allowed DEX to take this much
     uint256 allowance = token.allowance(msg.sender, address(this));
     require(allowance >= amount, "Check the token allowance");
+
+    // Transfer amount from sender to this DEX
     token.transferFrom(msg.sender, address(this), amount);
     payable(msg.sender).transfer(amount * price);
+
     emit Sold(amount);
   }
 }

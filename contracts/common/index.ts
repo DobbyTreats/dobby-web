@@ -1,3 +1,3 @@
 export default {
-  totalSupplyEthers: "1000000",
+  totalSupplyEthers: "10",
 }

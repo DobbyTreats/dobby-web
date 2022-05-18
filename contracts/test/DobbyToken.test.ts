@@ -10,7 +10,7 @@ chai.use(chaiAsPromised)
 const { expect } = chai
 
 describe("[DobbyToken Contract]", function () {
-  const totalSupply: string = ethers.utils.parseEther(common.totalSupplyEthers).toString() // 1 million
+  const totalSupply: string = ethers.utils.parseEther(common.totalSupplyEthers).toString()
   let dobbytoken: DobbyToken
 
   // Toy signers

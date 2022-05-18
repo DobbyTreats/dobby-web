@@ -10,7 +10,7 @@ chai.use(chaiAsPromised)
 const { expect } = chai
 
 describe("[DobbyDEX Contract]", function () {
-  const totalSupply: string = ethers.utils.parseEther(common.totalSupplyEthers).toString() // 1 million
+  const totalSupply: string = ethers.utils.parseEther(common.totalSupplyEthers).toString()
   let dobbydex: DobbyDEX
   let dobbytoken: DobbyToken
 
@@ -29,28 +29,43 @@ describe("[DobbyDEX Contract]", function () {
   })
 
   describe("exchange", function () {
+    it("should allow someone to buy", async function () {
+      const price = await dobbydex.price()
+      const initialDEXSupply: BigNumber = await dobbytoken.balanceOf(dobbydex.address)
+
+      // buy some tokens
+      await dobbydex.buy({ value: price.mul(50).toString() })
+      expect(await dobbytoken.balanceOf(owner.address)).to.equal(50)
+      expect(await dobbytoken.balanceOf(dobbydex.address)).to.equal(initialDEXSupply.sub(50))
+    })
+
+    // TODO: add buying case where amount is more than total supply
+
     it("should allow someone to sell", async function () {
       const price = await dobbydex.price()
 
       // buy some tokens
-      await dobbydex.buy({ value: ethers.utils.formatEther(price.mul(50).mul(10 ** 18)) })
+      await dobbydex.buy({ value: price.mul(50).toString() })
+      expect(await dobbytoken.balanceOf(owner.address)).to.equal(50)
 
       // give addr1 some dobby tokens
       await dobbytoken.transfer(addr1.address, 50)
       expect(await dobbytoken.balanceOf(addr1.address)).to.equal(50)
 
-      // sell half of it
+      // addr1 sells half of it
       const initialBalanceEther: BigNumber = await addr1.getBalance()
+      const initialDEXSupply: BigNumber = await dobbytoken.balanceOf(dobbydex.address)
+      await dobbytoken.connect(addr1).approve(dobbydex.address, 25) // allow DEX a 25
       await dobbydex.connect(addr1).sell(25)
       expect(await dobbytoken.balanceOf(addr1.address)).to.equal(25)
-      expect(await dobbytoken.balanceOf(dobbydex.address)).to.equal(25)
+      expect(await dobbytoken.balanceOf(dobbydex.address)).to.equal(initialDEXSupply.add(25))
       const newBalanceEther: BigNumber = await addr1.getBalance()
-
       // addr1 should have more ether
       expect(initialBalanceEther < newBalanceEther)
 
-      // the difference should equal to the price
-      expect(price.mul(25).add(initialBalanceEther)).to.equal(newBalanceEther)
+      //expect(initialBalanceEther.add(price.mul(25))).to.equal(newBalanceEther) // this is not really true, there is some gas fees
+
+      // TODO: include gas fees in the tests
     })
   })
 })
