@@ -6,16 +6,23 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "../contracts/DobbyToken.sol";
 
 contract DobbyTreats is ERC721, Ownable {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
+
+  DobbyToken public token;
+  address public dobbyTokenAddress;
+
   string public baseTokenURI;
   uint256 public totalSupply;
 
-  constructor() ERC721("DobbyTreats", "DOBBY") {
+  constructor(address _dobbytokenAddress) ERC721("DobbyTreats", "DOBBY") {
     baseTokenURI = "";
     totalSupply = 10000;
+    token = DobbyToken(_dobbytokenAddress);
+    dobbyTokenAddress = _dobbytokenAddress;
   }
 
   function mintNFT(address receiver) external onlyOwner returns (uint256) {

@@ -20,8 +20,11 @@ describe("[DobbyToken Contract]", function () {
   let addrs: SignerWithAddress[]
 
   beforeEach(async function () {
+    // setup
     const dobbytokenFactory = ((await ethers.getContractFactory("DobbyToken")) as unknown) as DobbyToken__factory
     ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
+
+    // deploy DobbyToken
     dobbytoken = await dobbytokenFactory.deploy(totalSupply)
     await dobbytoken.deployed()
   })

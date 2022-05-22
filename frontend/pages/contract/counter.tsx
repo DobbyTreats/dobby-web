@@ -21,7 +21,7 @@ const CounterContract: NextPage = () => {
   // contract view states
   const [count, setCount] = useState(0)
 
-  // load contract on first load
+  // on wallet load
   useEffect(() => {
     if (wallet) {
       const network = getNetwork(wallet.chainId)

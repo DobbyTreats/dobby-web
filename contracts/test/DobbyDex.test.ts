@@ -1,7 +1,7 @@
 import { ethers } from "hardhat"
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
-import { DobbyDEX__factory, DobbyDEX, DobbyToken } from "../../frontend/types/typechain/index"
+import { DobbyDEX__factory, DobbyToken__factory, DobbyDEX, DobbyToken } from "../../frontend/types/typechain/index"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { BigNumber } from "ethers"
 import common from "../common/index"
@@ -21,11 +21,27 @@ describe("[DobbyDEX Contract]", function () {
   let addrs: SignerWithAddress[]
 
   beforeEach(async function () {
+    // setup
+    const dobbytokenFactory = ((await ethers.getContractFactory("DobbyToken")) as unknown) as DobbyToken__factory
     const dobbydexFactory = ((await ethers.getContractFactory("DobbyDEX")) as unknown) as DobbyDEX__factory
     ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
-    dobbydex = await dobbydexFactory.deploy(totalSupply)
+
+    // deploy DobbyToken
+    dobbytoken = await dobbytokenFactory.deploy(totalSupply)
+    await dobbytoken.deployed()
+
+    // deploy DobbyDEX
+    dobbydex = await dobbydexFactory.deploy(dobbytoken.address)
     await dobbydex.deployed()
-    dobbytoken = (await ethers.getContractAt("DobbyToken", await dobbydex.dobbyTokenAddress())) as DobbyToken
+  })
+
+  describe("deployment", function () {
+    it("should allow owner to change price", async function () {
+      const price = await dobbydex.price()
+      const newPrice = price.mul(2)
+      await dobbydex.setPrice(newPrice)
+      expect(await dobbydex.price()).to.equal(newPrice)
+    })
   })
 
   describe("exchange", function () {

@@ -8,16 +8,14 @@ import Link from "next/link"
 const Home: NextPage = () => {
   return (
     <Layout>
-      <>
-        <Box>
-          <Title>Your DobbyToken Balance</Title>
-          <Text>01234</Text>
-          <Text>Buy more!</Text>
-        </Box>
-        <Box>
-          <Title>Your DobbyTreats Balance</Title>
-        </Box>
-      </>
+      <Box>
+        <Title>Your DobbyToken Balance</Title>
+        <Text>01234</Text>
+        <Text>Buy more!</Text>
+      </Box>
+      <Box>
+        <Title>Your DobbyTreats Balance</Title>
+      </Box>
     </Layout>
   )
 }

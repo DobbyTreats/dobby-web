@@ -1,15 +1,23 @@
 import { ethers } from "hardhat"
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
-import { DobbyTreats__factory, DobbyTreats } from "../../frontend/types/typechain/index"
+import {
+  DobbyTreats__factory,
+  DobbyTreats,
+  DobbyToken,
+  DobbyToken__factory,
+} from "../../frontend/types/typechain/index"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
 import { BigNumber } from "ethers"
+import common from "../common/index"
 
 chai.use(chaiAsPromised)
 const { expect } = chai
 
 describe("[DobbyTreats Contract]", function () {
+  const totalSupply: string = ethers.utils.parseEther(common.totalSupplyEthers).toString()
   let dobbytreats: DobbyTreats
+  let dobbytoken: DobbyToken
 
   // Treat data
   const _name = "DobbyTreats"
@@ -21,8 +29,16 @@ describe("[DobbyTreats Contract]", function () {
   let addrs: SignerWithAddress[]
 
   beforeEach(async function () {
+    // setup
+    const dobbytokenFactory = ((await ethers.getContractFactory("DobbyToken")) as unknown) as DobbyToken__factory
     const dobbytreatsFactory = ((await ethers.getContractFactory("DobbyTreats")) as unknown) as DobbyTreats__factory
     ;[owner, addr1, ...addrs] = await ethers.getSigners()
+
+    // deploy DobbyToken
+    dobbytoken = await dobbytokenFactory.deploy(totalSupply)
+    await dobbytoken.deployed()
+
+    // deploy DobbyTreats
     dobbytreats = await dobbytreatsFactory.deploy()
     await dobbytreats.deployed()
   })
