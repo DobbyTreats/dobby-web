@@ -9,12 +9,7 @@ const Home: NextPage = () => {
   return (
     <Layout>
       <Box>
-        <Title>Your DobbyToken Balance</Title>
-        <Text>01234</Text>
-        <Text>Buy more!</Text>
-      </Box>
-      <Box>
-        <Title>Your DobbyTreats Balance</Title>
+        <Link href="/token">Token</Link>
       </Box>
     </Layout>
   )
