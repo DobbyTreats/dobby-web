@@ -17,8 +17,8 @@ const Token: NextPage = () => {
   // wallet and contract
   const { wallet } = useWeb3Context()
   const [dobbytoken, setDobbytoken] = useState<DobbyTokenType>()
-  // contract view states
-  const [balance, setBalance] = useState<BigNumber>(BigNumber.from(0))
+  // view states
+  const [dobbyBalance, setDobbyBalance] = useState<BigNumber>(BigNumber.from(0))
 
   // on wallet load
   useEffect(() => {
@@ -43,7 +43,7 @@ const Token: NextPage = () => {
     if (dobbytoken) {
       // initial gets
       dobbytoken.balanceOf(wallet!.address).then(
-        (bal) => setBalance(bal),
+        (bal) => setDobbyBalance(bal),
         (err) => notify("balanceOf", err.message, "error")
       )
     }
@@ -53,7 +53,7 @@ const Token: NextPage = () => {
     <Layout>
       {dobbytoken ? (
         <>
-          <Title>Your DobbyToken balance: {balance.toString()} DOBBY</Title>
+          <Title>Your DobbyToken balance: {dobbyBalance.toString()} DOBBY</Title>
           <hr />
           <Title>Swap DobbyToken with Ether</Title>
         </>

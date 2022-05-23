@@ -30,6 +30,11 @@ describe("[DobbyToken Contract]", function () {
   })
 
   describe("deployment", function () {
+    it("should have the correct name and symbol ", async function () {
+      expect(await dobbytoken.name()).to.equal("DobbyToken")
+      expect(await dobbytoken.symbol()).to.equal("DOBBI")
+    })
+
     it("should assign the total supply of tokens to the owner", async function () {
       const ownerBalance: BigNumber = await dobbytoken.balanceOf(owner.address)
       expect(await dobbytoken.totalSupply()).to.equal(ownerBalance)

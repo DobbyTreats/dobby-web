@@ -19,11 +19,7 @@ describe("[DobbyTreats Contract]", function () {
   let dobbytreats: DobbyTreats
   let dobbytoken: DobbyToken
 
-  // Treat data
-  const _name = "DobbyTreats"
-  const _symbol = "DOBBY"
-
-  // Toy signers
+  // signers
   let owner: SignerWithAddress
   let addr1: SignerWithAddress
   let addrs: SignerWithAddress[]
@@ -39,14 +35,14 @@ describe("[DobbyTreats Contract]", function () {
     await dobbytoken.deployed()
 
     // deploy DobbyTreats
-    dobbytreats = await dobbytreatsFactory.deploy()
+    dobbytreats = await dobbytreatsFactory.deploy(dobbytoken.address, common.treatsSupply)
     await dobbytreats.deployed()
   })
 
   describe("deployment", function () {
     it("should have the correct name and symbol ", async function () {
-      expect(await dobbytreats.name()).to.equal(_name)
-      expect(await dobbytreats.symbol()).to.equal(_symbol)
+      expect(await dobbytreats.name()).to.equal("DobbyTreats")
+      expect(await dobbytreats.symbol()).to.equal("DOBBY")
     })
 
     it("should have the correct total supply", async function () {
@@ -56,6 +52,7 @@ describe("[DobbyTreats Contract]", function () {
 
   describe("minting", function () {
     it("should mint a token with token ids 1 and 2 to account1", async function () {
+      // this is the address of target account
       const address1 = addr1.address
       await dobbytreats.mintNFT(address1)
       expect(await dobbytreats.ownerOf(1)).to.equal(address1)

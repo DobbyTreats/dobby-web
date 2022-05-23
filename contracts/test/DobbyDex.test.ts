@@ -33,6 +33,9 @@ describe("[DobbyDEX Contract]", function () {
     // deploy DobbyDEX
     dobbydex = await dobbydexFactory.deploy(dobbytoken.address)
     await dobbydex.deployed()
+
+    // send all tokens to DobbyDEX
+    await dobbytoken.transfer(dobbydex.address, totalSupply)
   })
 
   describe("deployment", function () {
@@ -41,6 +44,10 @@ describe("[DobbyDEX Contract]", function () {
       const newPrice = price.mul(2)
       await dobbydex.setPrice(newPrice)
       expect(await dobbydex.price()).to.equal(newPrice)
+    })
+
+    it("should have DobbyDEX have all the tokens", async function () {
+      expect(await dobbytoken.balanceOf(dobbydex.address)).to.equal(totalSupply)
     })
   })
 

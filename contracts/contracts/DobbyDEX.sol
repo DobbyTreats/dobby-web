@@ -3,16 +3,19 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../contracts/DobbyToken.sol";
+import "./DobbyToken.sol";
 
 contract DobbyDEX is Ownable {
-  DobbyToken public token;
+  DobbyToken private token;
   address public dobbyTokenAddress;
   uint256 public price = 0.001 ether;
 
   event Bought(uint256 amount);
   event Sold(uint256 amount);
 
+  /**
+   * @dev needs to interact with DobbyToken contract, so we give it's address
+   */
   constructor(address _dobbytokenAddress) {
     token = DobbyToken(_dobbytokenAddress);
     dobbyTokenAddress = _dobbytokenAddress;
@@ -32,6 +35,9 @@ contract DobbyDEX is Ownable {
     price = value;
   }
 
+  /**
+   * @dev buy DOBBI with the native currency
+   */
   function buy() public payable {
     // find the amount to buy w.r.t price
     uint256 amountTobuy = _getAmount(msg.value);
@@ -48,6 +54,9 @@ contract DobbyDEX is Ownable {
     emit Bought(amountTobuy);
   }
 
+  /**
+   * @dev sell DOBBI for native currency
+   */
   function sell(uint256 amount) public {
     // check if amount is positive
     require(amount > 0, "You need to sell at least some tokens");

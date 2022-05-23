@@ -1,3 +1,4 @@
 export default {
-  totalSupplyEthers: "10",
+  totalSupplyEthers: "100",
+  treatsSupply: 10000,
 }
