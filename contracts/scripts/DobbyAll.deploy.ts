@@ -1,6 +1,6 @@
 import { ethers } from "hardhat"
 import common from "../common/index"
-import { deployDobbyDEX, deployDobbyToken, deployDobbyTreats } from "./deployments"
+import { deployDobbyDEX, deployDobbyToken, deployDobbyTreats } from "./_deployments"
 
 async function main() {
   const dobbyTokenAddress: string = await deployDobbyToken(ethers.utils.parseEther(common.totalSupplyEthers))
